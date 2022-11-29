@@ -124,7 +124,7 @@ In the end, you must close the cursor and the connection.
   mydb.close()
 ```
 
-You can also get code snippet from [here]().
+You can also get code snippet from [here](https://github.com/kishlayjeet/Connect-PostgreSQL-database-to-Python/blob/d7c5cae0a809ec0714cf193c5db6a77f30e70502/code-snippet.py).
 
 ## Authors
 I am [Kishlay](https://www.github.com/kishlayjeet), and I have written this tutorial, but other people have also helped me with it.
