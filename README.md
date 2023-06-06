@@ -1,39 +1,45 @@
-# Connect PostgreSQL database with Python
+# Connect PostgreSQL Database with Python
 
-In this section, I'll explain how to connect your PostgreSQL database to Python and query it.
+This tutorial explains how to connect your PostgreSQL database to Python and query it.
 
-## Install "Psycopg2"
+## Prerequisites
 
-To access the PostgreSQL database, Python needs a PostgreSQL driver. You must first install the `Psycopg2` package on your computer.
+Before you begin, make sure you have the following installed:
+
+- Python: You can download and install Python from the official website (https://www.python.org).
+- PostgreSQL: Install PostgreSQL on your computer by following the instructions from the official website (https://www.postgresql.org).
+
+## Install the "psycopg2" Package
+
+To access the PostgreSQL database, Python needs a PostgreSQL driver. You can install the `psycopg2` package using pip, the Python package installer. Open your command prompt or terminal and run the following command:
 
 ```bash
-python -m pip install psycopg2
+pip install psycopg2
 ```
 
-## Import Psycopg2"
+## Import the "psycopg2" Library
 
-To access the PostgreSQL database, import `psycopg2` library into your Python code.
+To use the `psycopg2` package in your Python code, import the `psycopg2` module:
 
 ```python
 import psycopg2
 ```
 
-## Creating a Database:
+## Creating a Database
 
-For the purpose of example, we will need a sample database. To do so, follow the below steps:
+For the purpose of this example, we will need a sample database. Follow the steps below to create it:
 
-- First, open a PostgreSQL client tool like `pgadmin4` or `psql`.
-- Second login to the database using your credentials.
-- Finally, run the following command to create a database (for example, `company`).
+1. Open a PostgreSQL client tool like `pgadmin4` or `psql`.
+2. Log in to the database using your credentials.
+3. Run the following command to create a database, for example, `company`:
 
 ```sql
 CREATE DATABASE company;
 ```
 
-## Create Connection:
+## Create Connection
 
-To connect to the above created database (i.e., `company`), we use the `connect()` function. 
-So, establish a connection to the database. Use your PostgreSQL database's username and password in the Python code.
+To connect to the previously created database (`company`), we use the `connect()` function. Establish a connection to the database by providing your PostgreSQL database's username, password, and database name in the Python code:
 
 ```python
 mydb = psycopg2.connect(
@@ -44,9 +50,9 @@ mydb = psycopg2.connect(
 )
 ```
 
-## Make Cursor:
+## Create a Cursor
 
-You must create or include a `cursor()` in your Python code in order to run SQL queries.
+You need to create a cursor to execute SQL queries in your Python code:
 
 ```python
 mycursor = mydb.cursor()
@@ -54,19 +60,19 @@ mycursor = mydb.cursor()
 
 Now you can use SQL commands to query the database.
 
-## Commit Changes:
+## Commit Changes
 
-You also have to include the commit function and set automatic commit to be `true`.
+You also need to include the commit function and set the automatic commit to be `True`:
 
 ```python
 mydb.set_session(autocommit=True)
 ```
 
-So that each action is committed or saved without having to call `mydb.commit()` after each command.
+This ensures that each action is committed or saved without having to call `mydb.commit()` after each command.
 
-## Query the Database:
+## Query the Database
 
-Now create a table in the database using the cursor we created.
+Now, let's create a table in the database using the cursor we created:
 
 ```python
 mycursor.execute('''CREATE TABLE employee(
@@ -76,9 +82,9 @@ mycursor.execute('''CREATE TABLE employee(
 ''')
 ```
 
-## Insert Data Into Table:
+## Insert Data Into Table
 
-Now we are inserting the values into the database.
+Now, let's insert values into the database:
 
 ```python
 mycursor.execute('''
@@ -89,35 +95,41 @@ INSERT INTO employee (EmployeeID, Name, Email)
 ''')
 ```
 
-## Retrive the Data:
+## Retrieve the Data
 
-Now let’s query the database.
+Let's query the database:
 
 ```python
 mycursor.execute("SELECT * FROM employee")
 ```
 
-It’s important to note that after the query executes, you still need to use one of the `psycopg2` functions to retrieve data rows.
+After executing the query, you can use one of the `psycopg2` functions to retrieve data rows:
 
-- fetchone()
-- fetchall()
-- fetchmany()
+- `fetchone()`: Retrieves exactly one row (the first row) after executing the SQL query.
+- `fetchall()`: Retrieves all the rows.
+- `fetchmany()`: Retrieves a specific number of rows.
 
-For example,
+For example:
 
 ```python
 print(mycursor.fetchone())
 ```
 
+Output:
+
 | EmployeeID | Name | Email            |
 | :--------- | :--- | :--------------- |
 | 101        | Mark | mark@company.com |
 
-The most basic way to fetch data from your database is to use the `fetchone()` function. This function will return exactly one row (the first row) after executing the SQL query.
+The most basic way to fetch data from your database is to use the `fetchone()` function. It returns exactly one row (the first row) after executing the SQL query.
 
 ```python
+
+
 print(mycursor.fetchall())
 ```
+
+Output:
 
 | EmployeeID | Name    | Email               |
 | :--------- | :------ | :------------------ |
@@ -125,38 +137,41 @@ print(mycursor.fetchall())
 | 102        | Robert  | robert@company.com  |
 | 103        | Spencer | spencer@company.com |
 
-If you need more than one row from your database, you can use `fetchall()`, which works the same as `fetchone()` except that it returns all the rows.
+If you need more than one row from your database, you can use `fetchall()`, which returns all the rows.
 
 ```python
 print(mycursor.fetchmany(2))
 ```
+
+Output:
 
 | EmployeeID | Name   | Email              |
 | :--------- | :----- | :----------------- |
 | 101        | Mark   | mark@company.com   |
 | 102        | Robert | robert@company.com |
 
-With `fetchmany()`, you have another option to retrieve multiple records from the database and have more control over the exact number of rows retrieved.
+With `fetchmany()`, you have another option to retrieve a specific number of rows from the database.
 
-You can use any of them depending on your needs.
+Choose the appropriate function based on your needs.
 
-## Close the Connection:
+## Close the Connection
 
-In the end, you must close the cursor and the connection.
+Finally, remember to close the cursor and the connection:
 
 ```python
 mycursor.close()
 mydb.close()
 ```
 
-You can also get code snippet from [here](https://github.com/kishlayjeet/Connect-PostgreSQL-database-to-Python/blob/d7c5cae0a809ec0714cf193c5db6a77f30e70502/code-snippet.py).
+You can also find the code snippet [here](https://github.com/kishlayjeet/Connect-PostgreSQL-database-to-Python/blob/d7c5cae0a809ec0714cf193c5db6a77f30e70502/code-snippet.py).
 
 ## Authors
 
-I am [Kishlay](https://www.github.com/kishlayjeet), and I have written this tutorial, but other people have also helped me with it.
-If you have any trouble with this tutorial, please tell me about it, and I will make it better.
-If you like this tutorial and this helped you out, then please give it a star.
+This tutorial was written by [Kishlay 
+Jeet](https://www.github.com/kishlayjeet), with contributions from other people.
+If you encounter any issues with this tutorial, please let me know, and I will make improvements.
+If you found this tutorial helpful, please consider giving it a star.
 
 ## Feedback
 
-If you have any feedback, please reach out to me at contact.kishlayjeet@gmail.com
+If you have any feedback, please reach out to me at contact.kishlayjeet@gmail.com.
