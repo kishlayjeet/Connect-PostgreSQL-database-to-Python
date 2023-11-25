@@ -1,32 +1,46 @@
-import psycopg2
+import psycopg2 
 
-mydb = psycopg2.connect(
-  host="localhost",
-  user="yourUsername",
-  password="yourPassword",
-  database="company"
-)
+# Creation of the connection class
 
-mycursor = mydb.cursor()
+class Connection:
+  def __init__(self):
+    try:
+      self.connection = psycopg2.connect(
+        host = "localhost",
+        user = "yourUsername",
+        password = "yourPassword",
+        database = "company"
+      )
+      self.cursor = self.connection.cursor()
+    except Exception as e:
+      print(f"Error: {e}")
 
-mydb.set_session(autocommit=True)
+    self.cursor.execute("""CREATE TABLE Employee(
+      EmployeeID int,
+      name varchar(255),
+      email varchar(255)
+    );
+    """)
 
-mycursor.execute('''CREATE TABLE employee(  
-      EmployeeID int,  
-      Name varchar(255),  
-      Email varchar(255));
-''')
+  # Creation of the method that inserts data
 
-mycursor.execute('''
-  INSERT INTO employee (EmployeeID, Name, Email) 
-      VALUES (101, 'Mark', 'mark@company.com'),
-             (102, 'Robert', 'robert@company.com'),
-             (103, 'Spencer', 'spencer@company.com');
-''')
+  def insertData(self, name, email):
+    cursor = self.cursor
+    sql = "INSERT INTO Employee (name, email) VALUES (%s, %s)"
+    try:
+        cursor.execute(sql, (name, email))
+        self.connection.commit()
+        print("Data inserted successfully")
+    except Exception as e:
+        self.connection.rollback()
+        print(f"Error inserting data: {e}")
 
-mycursor.execute("SELECT * FROM employee")
+  # An instance of the connection class is created
 
-print(mycursor.fetchall())
+  connection = Connection()
+  
+  # Insert data into table 
 
-mycursor.close()
-mydb.close()
+  connection.insertData("Mark", "mark@company.com")
+  connection.insertData("Robert", "robert@company.com")
+  connection.insertData("Spencer", "spencer@company.com")
